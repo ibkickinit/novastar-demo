@@ -1,2 +1,378 @@
-<!-- Redirect: content synced from ibkickinit/Claude novastar/ui/current.html -->
-<!-- This file is kept in sync automatically. See private repo for source of truth. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=480,initial-scale=1,user-scalable=no">
+<title>NovaTool v6</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0a0c0f;--s1:#12151a;--s2:#181c23;--s3:#1e232c;--b1:#262d38;--b2:#333c4a;
+  --t1:#d8dce3;--t2:#7d8898;--t3:#4a5567;
+  --am:#ffb300;--am2:#b37d00;--amb:rgba(255,179,0,.12);
+  --tl:#2dd4a8;--tlb:rgba(45,212,168,.12);
+  --rd:#ff5252;--rdb:rgba(255,82,82,.12);
+  --gn:#66bb6a;--mode:dark
+}
+.light{
+  --bg:#f0f1f3;--s1:#ffffff;--s2:#f7f7f8;--s3:#edeef0;--b1:#d4d7dc;--b2:#bcc0c8;
+  --t1:#1a1c20;--t2:#5a5e68;--t3:#8a8e98;
+  --amb:rgba(180,120,0,.1);--tlb:rgba(20,140,110,.1);--rdb:rgba(200,50,50,.1);--mode:light
+}
+html,body{background:var(--bg);color:var(--t1);font-family:'Barlow Condensed',sans-serif;width:480px;height:800px;overflow:hidden;margin:0 auto}
+body{display:flex;flex-direction:column;transition:background .3s,color .3s}
+.m{font-family:'Share Tech Mono',monospace}
+.sb{background:var(--s1);border-bottom:1px solid var(--b1);height:42px;display:flex;align-items:center;padding:0 10px;gap:8px;flex-shrink:0;z-index:20}
+.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--tl);box-shadow:0 0 4px var(--tl)}
+.sb-txt{flex:1;font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{font-size:10px;font-weight:700;padding:3px 6px;border-radius:4px;letter-spacing:.4px}
+.badge-p{background:var(--amb);color:var(--am);border:1px solid rgba(255,179,0,.2)}
+.alt{height:0;overflow:hidden;transition:height .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;cursor:pointer;gap:4px}
+.alt.on{height:28px}
+.alt.w{background:var(--amb);color:var(--am);border-bottom:1px solid rgba(255,179,0,.15)}
+.main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:10px}
+.main::-webkit-scrollbar{width:2px}.main::-webkit-scrollbar-thumb{background:var(--b1)}
+.pg{display:none}.pg.on{display:block}
+.pc-bar{background:var(--s2);border:1px solid var(--b1);border-radius:6px;margin-bottom:6px;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.pc-bar:active{background:var(--s3)}.pc-bar.expanded{border-color:var(--am);cursor:default}
+.pc-summary{padding:10px 12px;display:flex;align-items:center;gap:8px}
+.pc-chev{color:var(--t3);font-size:14px;transition:transform .2s;flex-shrink:0}
+.pc-bar.expanded .pc-chev{transform:rotate(90deg);color:var(--am)}
+.pc-s-dot{width:8px;height:8px;border-radius:50%;background:var(--tl);flex-shrink:0}
+.pc-s-info{flex:1;min-width:0}
+.pc-s-l1{font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+.pc-s-l2{font-size:12px;color:var(--t2);margin-top:1px;display:flex;gap:6px;flex-wrap:wrap}
+.pc-s-l2 .sig{color:var(--gn)}.pc-s-l2 .mis{color:var(--am)}
+.pc-detail{display:none;border-top:1px solid var(--b1)}.pc-bar.expanded .pc-detail{display:block}
+.inp{padding:8px 12px;background:var(--s3);border-bottom:1px solid rgba(255,255,255,.03);display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px}
+.inp:active{opacity:.7}.inp-l{color:var(--t3);font-size:11px}.inp-v{flex:1;font-weight:500}.inp-sig{color:var(--tl);font-size:11px}
+.scr{margin:6px 8px;background:var(--s1);border:1px solid var(--b1);border-radius:6px;overflow:hidden}
+.scr-hd{padding:8px 12px;display:flex;align-items:center;gap:6px}
+.scr-nm{font-size:14px;font-weight:600;flex:1}.scr-sz{font-size:12px;color:var(--t2)}
+.scr-stats{display:flex;gap:10px;padding:2px 12px 6px;font-size:12px;color:var(--t2);flex-wrap:wrap}
+.scr-stats .v{font-weight:500;color:var(--t1)}.scr-stats .am{color:var(--am)}.scr-stats .tl{color:var(--tl)}
+.ports-row{display:flex;align-items:center;gap:5px;padding:4px 12px 8px}
+.ports-lbl{font-size:11px;color:var(--t3);margin-right:2px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px}
+.ports-lbl:active{color:var(--am)}
+.pd{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;border:2px solid transparent;cursor:pointer;transition:all .12s}
+.pd:active{transform:scale(.85)}.pd.ok{background:var(--tlb);border-color:var(--tl);color:var(--tl)}
+.pd.warn{background:var(--amb);border-color:var(--am);color:var(--am)}
+.pd.mt{background:rgba(255,255,255,.03);border-color:var(--b1);color:var(--t3)}.light .pd.mt{background:rgba(0,0,0,.03)}
+.pl{display:none;margin:0 8px 6px;border:1px solid var(--b1);border-radius:5px;overflow:hidden;background:var(--s1)}.pl.show{display:block}
+.pl-i{display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.03);cursor:pointer;gap:8px;min-height:48px}
+.pl-i:last-child{border:none}.pl-i:active{background:var(--s2)}
+.pl-n{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.pl-info{flex:1}.pl-l1{font-size:13px;font-weight:500}.pl-l2{font-size:11px;color:var(--t3)}
+.pl-st{font-size:10px;font-weight:600;padding:3px 6px;border-radius:3px}.pl-ok{background:var(--tlb);color:var(--tl)}.pl-w{background:var(--amb);color:var(--am)}
+.rcfg-a{margin:0 12px 8px;background:var(--amb);border:1px solid rgba(255,179,0,.2);border-radius:6px;padding:10px 12px}
+.rcfg-a-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.rcfg-a-t{font-size:13px;font-weight:600;color:var(--am)}
+.rcfg-fix{background:var(--am);color:var(--bg);border:none;border-radius:5px;padding:6px 14px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;min-height:34px}.rcfg-fix:active{opacity:.8}
+.rcfg-det{font-size:12px;color:var(--t2)}
+.rcfg-exp{display:none;margin-top:8px;border-top:1px solid rgba(255,179,0,.12);padding-top:8px}.rcfg-exp.show{display:block}
+.rcfg-opt{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--s2);border:1px solid var(--b1);border-radius:5px;margin-bottom:5px;cursor:pointer;font-size:13px;min-height:44px}
+.rcfg-opt:active{border-color:var(--am)}.rcfg-opt.sel{border-color:var(--am);background:var(--amb)}
+.rr{width:16px;height:16px;border-radius:50%;border:2px solid var(--b2);flex-shrink:0}
+.rcfg-opt.sel .rr{border-color:var(--am);background:var(--am);box-shadow:inset 0 0 0 3px var(--bg)}
+.rcfg-go{width:100%;margin-top:6px;padding:10px;background:var(--am);color:var(--bg);border:none;border-radius:5px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;min-height:44px}.rcfg-go:active{opacity:.8}
+.rcfg-n{font-size:11px;color:var(--t3);margin-top:6px;line-height:1.4}
+.slbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin:10px 0 6px}
+.scr-sel{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.scr-b{padding:8px 6px;background:var(--s2);border:1px solid var(--b1);border-radius:5px;text-align:center;cursor:pointer;transition:all .12s;flex:1;min-width:90px;min-height:48px}
+.scr-b:active{transform:scale(.95)}.scr-b.on{border-color:var(--am);background:var(--amb)}
+.scr-b-nm{font-size:12px;font-weight:600}.scr-b.on .scr-b-nm{color:var(--am)}.scr-b-d{font-size:10px;color:var(--t3)}
+.scr-all{font-size:11px;color:var(--t3);text-align:center;margin-bottom:6px;cursor:pointer;padding:4px}.scr-all:active{color:var(--am)}
+.qa{display:grid;gap:4px;margin-bottom:6px}.qa3{grid-template-columns:repeat(3,1fr)}.qa4{grid-template-columns:repeat(4,1fr)}
+.qb{background:var(--s2);border:1px solid var(--b1);border-radius:6px;padding:10px 4px;text-align:center;cursor:pointer;transition:all .12s;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.qb:active{transform:scale(.95)}.qb.on{border-color:var(--am);background:var(--amb);color:var(--am)}
+.qb.dn{border-color:rgba(255,82,82,.2);background:var(--rdb);color:var(--rd)}
+.qb-l{font-size:12px;font-weight:600}.qb-s{font-size:10px;color:var(--t3);margin-top:2px}.qb.on .qb-s{color:rgba(255,179,0,.6)}
+.sr{display:flex;align-items:center;gap:8px;margin-bottom:6px;min-height:36px}
+.sr-l{font-size:13px;font-weight:500;min-width:60px}.sr-v{font-size:13px;color:var(--am);min-width:36px;text-align:right}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--b1);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--am);border:3px solid var(--bg)}
+.sv-sec{background:var(--s2);border:1px solid var(--b1);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.sv-hd{padding:10px 12px;font-size:14px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.03);display:flex;align-items:center;gap:6px}
+.sv-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.02);min-height:48px}.sv-item:last-child{border:none}
+.sv-chk{width:20px;height:20px;border-radius:4px;border:2px solid var(--b2);flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sv-chk.on{border-color:var(--am);background:var(--am)}.sv-chk.on::after{content:'\2713';font-size:12px;color:var(--bg);font-weight:700}
+.sv-info{flex:1}.sv-l1{font-size:13px;font-weight:500}.sv-l2{font-size:11px;color:var(--t2)}
+.sv-badge{font-size:10px;padding:3px 6px;border-radius:3px;font-weight:600}.sv-mod{background:var(--amb);color:var(--am)}.sv-ok{background:var(--tlb);color:var(--tl)}
+.sv-big{width:100%;padding:14px;background:var(--am);color:var(--bg);border:none;border-radius:6px;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:8px;min-height:48px}.sv-big:active{opacity:.8}
+.sv-warn{font-size:11px;color:var(--t3);text-align:center;margin-top:8px;line-height:1.5}
+.cov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:20px}.cov.show{display:flex}
+.cbox{background:var(--s2);border:2px solid var(--am);border-radius:10px;padding:20px;max-width:420px;width:100%}
+.cbox-t{font-size:18px;font-weight:700;color:var(--am);margin-bottom:10px}
+.cbox-b{font-size:13px;color:var(--t2);margin-bottom:18px;line-height:1.6}.cbox-b b{color:var(--t1)}
+.cbox-btns{display:flex;gap:8px}
+.cb{flex:1;padding:12px;border-radius:6px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-align:center;border:1px solid var(--b1);min-height:48px}
+.cb-c{background:var(--s3);color:var(--t1)}.cb-c:active{background:var(--b1)}
+.cb-go{background:var(--am);color:var(--bg);border-color:var(--am)}.cb-go:active{opacity:.8}
+.cache-card{background:var(--amb);border:1px solid rgba(255,179,0,.25);border-radius:6px;padding:10px 12px;margin-bottom:8px}
+.cache-hd{font-size:13px;font-weight:600;color:var(--am);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.cache-dot{width:8px;height:8px;border-radius:50%;background:var(--am)}
+.cache-info{font-size:12px;color:var(--t2);line-height:1.5}
+.cache-btns{display:flex;gap:4px;margin-top:8px}
+.cache-btn{flex:1;padding:8px;text-align:center;font-size:12px;font-weight:600;font-family:inherit;border-radius:5px;cursor:pointer;min-height:40px;display:flex;align-items:center;justify-content:center}
+.home-card{background:var(--s2);border:1px solid var(--b1);border-radius:6px;margin-bottom:8px;overflow:hidden}
+.home-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.03);min-height:44px}.home-item:last-child{border:none}
+.hi-l{font-size:13px;font-weight:500}.hi-s{font-size:11px;color:var(--t3)}.hi-v{font-size:13px;text-align:right}
+.hi-v.am{color:var(--am)}.hi-v.gn{color:var(--gn)}.hi-v.tl{color:var(--tl)}
+.batt{display:flex;align-items:center;gap:6px}
+.batt-bar{width:30px;height:14px;border:1.5px solid var(--t2);border-radius:3px;position:relative;overflow:hidden}
+.batt-bar::after{content:'';position:absolute;right:-4px;top:3px;width:3px;height:8px;background:var(--t2);border-radius:0 1px 1px 0}
+.batt-fill{height:100%;background:var(--gn);border-radius:1px}
+.tgrid{display:grid;gap:3px;touch-action:none;user-select:none}
+.tl{aspect-ratio:1;border-radius:3px;border:1.5px solid var(--b1);background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);cursor:pointer;transition:all .1s}
+.tl.sel{border-color:var(--am);background:var(--am);color:var(--bg);font-weight:700;box-shadow:0 0 8px rgba(255,179,0,.25)}
+.tl.ok{border-color:rgba(45,212,168,.2)}.tl.warn{border-color:var(--am);background:var(--amb);color:var(--am)}
+.sel-bar{display:flex;gap:4px;margin-bottom:6px}
+.sel-b{flex:1;padding:8px;background:var(--s2);border:1px solid var(--b1);border-radius:5px;text-align:center;font-size:11px;font-weight:600;font-family:inherit;color:var(--t2);cursor:pointer;min-height:40px;display:flex;align-items:center;justify-content:center}
+.sel-b:active{background:var(--s3);color:var(--t1)}.sel-b.pri{background:var(--am);color:var(--bg);border-color:var(--am)}
+.nav-back{display:flex;align-items:center;gap:4px;font-size:14px;font-weight:600;color:var(--am);cursor:pointer;margin-bottom:8px;padding:4px 0;min-height:36px}.nav-back:active{opacity:.6}
+.tb{display:flex;background:var(--s1);border-top:1px solid var(--b1);height:52px;flex-shrink:0}
+.tt{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--t3);cursor:pointer;border-top:2px solid transparent;position:relative}
+.tt:active{background:var(--s2)}.tt.on{color:var(--am);border-top-color:var(--am)}
+.tt-i{font-size:16px;margin-bottom:2px}
+.tt-dot{position:absolute;top:5px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:var(--am);display:none}.tt-dot.show{display:block}
+.toast{position:fixed;bottom:60px;left:10px;right:10px;background:var(--s3);border:1px solid var(--am);border-radius:6px;padding:8px 12px;font-size:12px;transform:translateY(50px);opacity:0;transition:all .2s;z-index:50;pointer-events:none}.toast.show{transform:translateY(0);opacity:1}
+.toast b{color:var(--am)}
+</style>
+</head>
+<body>
+<div class="sb"><div class="sb-dot"></div><div class="sb-txt">2 processors &middot; 3 screens &middot; 60 tiles</div><span class="badge badge-p m">PROC</span></div>
+<div class="alt w on" onclick="this.classList.remove('on')">&bull; 2 RCFG mismatch on VX4S Screen 1</div>
+<div class="main">
+
+<div class="pg" id="pg-home">
+  <div class="slbl">Device</div>
+  <div class="home-card">
+    <div class="home-item"><div><div class="hi-l">Battery</div></div><div class="batt"><span class="m hi-v gn">78%</span><div class="batt-bar"><div class="batt-fill" style="width:78%"></div></div></div></div>
+    <div class="home-item"><div><div class="hi-l">WiFi AP</div><div class="hi-s">NovaTool-7A3F &middot; 1 client</div></div><div class="hi-v gn m">Active</div></div>
+    <div class="home-item"><div><div class="hi-l">WiFi client</div><div class="hi-s">For updates / DB sync</div></div><div class="hi-v m" style="color:var(--t3)">Not connected</div></div>
+    <div class="home-item"><div><div class="hi-l">Ethernet</div><div class="hi-s">Link up &middot; Gigabit</div></div><div class="hi-v gn m">1 Gbps</div></div>
+    <div class="home-item"><div><div class="hi-l">USB</div><div class="hi-s">VX4S detected</div></div><div class="hi-v am m">Connected</div></div>
+  </div>
+  <div class="slbl">Network</div>
+  <div class="home-card">
+    <div class="home-item"><div class="hi-l">IP mode</div><div class="hi-v m">Auto</div></div>
+    <div class="home-item"><div class="hi-l">IP address</div><div class="hi-v am m">192.168.1.100</div></div>
+    <div class="home-item"><div class="hi-l">Subnet</div><div class="hi-v m">255.255.255.0</div></div>
+  </div>
+  <div class="slbl">Storage</div>
+  <div class="home-card">
+    <div class="home-item"><div class="hi-l">Saved RCFGs</div><div class="hi-v m">14 files</div></div>
+    <div class="home-item"><div class="hi-l">Compat DB</div><div class="hi-v m">v1.4 &middot; synced 2d ago</div></div>
+    <div class="home-item"><div class="hi-l">Free space</div><div class="hi-v m">2.8 GB</div></div>
+  </div>
+  <div class="slbl">Display</div>
+  <div class="home-card">
+    <div class="home-item" onclick="document.body.classList.toggle('light');toast(document.body.classList.contains('light')?'Light mode':'Dark mode')"><div><div class="hi-l">Theme</div><div class="hi-s">Tap to toggle</div></div><div class="hi-v am m">Dark</div></div>
+    <div class="home-item"><div class="hi-l">LCD brightness</div><input type="range" min="10" max="100" value="80" style="width:120px"></div>
+  </div>
+  <div class="slbl">System</div>
+  <div class="home-card">
+    <div class="home-item"><div class="hi-l">Firmware</div><div class="hi-v m">v0.1.0-dev</div></div>
+    <div class="home-item" onclick="toast('Scanning subnet...')"><div class="hi-l">Scan network</div><div class="hi-v am" style="font-size:14px;cursor:pointer">&#x27f3;</div></div>
+  </div>
+</div>
+
+<div class="pg on" id="pg-ov">
+<div class="pc-bar expanded" onclick="tglPC(this)">
+  <div class="pc-summary">
+    <div class="pc-chev">&#x25b8;</div><div class="pc-s-dot"></div>
+    <div class="pc-s-info">
+      <div class="pc-s-l1">VX4S <span class="badge badge-p m" style="font-size:9px;padding:1px 4px">USB</span></div>
+      <div class="pc-s-l2 m">2 screens &middot; 60 tiles &middot; <span class="sig">HDMI1 1080p60 &#x25cf;</span> &middot; <span class="mis">2 RCFG mis</span></div>
+    </div>
+  </div>
+  <div class="pc-detail" onclick="event.stopPropagation()">
+    <div class="inp" onclick="toast('Input picker')"><span class="inp-l">Input</span><span class="inp-v">HDMI 1 &middot; 1920&times;1080@60</span><span class="inp-sig m">&#x25cf; signal</span><span style="color:var(--t3)">&#x25be;</span></div>
+    <div class="scr">
+      <div class="scr-hd"><div class="scr-nm">Screen 1: Main wall</div><div class="scr-sz m">2304&times;1152</div></div>
+      <div class="scr-stats m"><span>48 tiles</span><span>Bri <span class="v am">100%</span></span><span>Cal <span class="v tl">ON</span></span><span>42&deg;C</span></div>
+      <div class="ports-row">
+        <span class="ports-lbl m" onclick="event.stopPropagation();tglPL('pl1')">Ports &#x25be;</span>
+        <div class="pd ok" onclick="event.stopPropagation();drillPort('VX4S P1',24,6,4,[])">1</div>
+        <div class="pd warn" onclick="event.stopPropagation();drillPort('VX4S P2',24,6,4,[10,11])">2</div>
+      </div>
+      <div class="pl" id="pl1">
+        <div class="pl-i" onclick="event.stopPropagation();drillPort('VX4S P1',24,6,4,[])"><div class="pl-n" style="background:var(--tlb);border:2px solid var(--tl);color:var(--tl)">1</div><div class="pl-info"><div class="pl-l1">24 tiles &middot; 192&times;192</div><div class="pl-l2 m">MRV300 v3.8.1 &middot; 38&ndash;44&deg;C</div></div><span class="pl-st pl-ok m">OK</span><span style="color:var(--t3)">&rsaquo;</span></div>
+        <div class="pl-i" onclick="event.stopPropagation();drillPort('VX4S P2',24,6,4,[10,11])"><div class="pl-n" style="background:var(--amb);border:2px solid var(--am);color:var(--am)">2</div><div class="pl-info"><div class="pl-l1">24 tiles &middot; 192&times;384 &times;16, 192&times;192 &times;8</div><div class="pl-l2 m">MRV330 v3.6.0 &middot; 41&ndash;47&deg;C</div></div><span class="pl-st pl-w m">2 MIS</span><span style="color:var(--t3)">&rsaquo;</span></div>
+      </div>
+      <div class="rcfg-a">
+        <div class="rcfg-a-hd"><span class="rcfg-a-t">&#x26a0; 2 RCFG mismatch &middot; P2 #11, #12</span><button class="rcfg-fix" onclick="event.stopPropagation();tglExp('rf1')">Fix it</button></div>
+        <div class="rcfg-det m">Tiles differ from the other 46</div>
+        <div class="rcfg-exp" id="rf1">
+          <div style="font-size:12px;font-weight:600;margin-bottom:6px">Sync RCFG &mdash; all variants cached:</div>
+          <div class="rcfg-opt sel" onclick="event.stopPropagation();sR(this)"><div class="rr"></div><div style="flex:1"><div style="font-weight:500;font-size:13px">Config A (majority)</div><div class="m" style="font-size:10px;color:var(--t3)">a7f3...e2c1</div></div><span class="m" style="font-size:11px;color:var(--t2)">46 tiles</span></div>
+          <div class="rcfg-opt" onclick="event.stopPropagation();sR(this)"><div class="rr"></div><div style="flex:1"><div style="font-weight:500;font-size:13px">Config B (minority)</div><div class="m" style="font-size:10px;color:var(--t3)">3b01...f8a9</div></div><span class="m" style="font-size:11px;color:var(--t2)">2 tiles</span></div>
+          <button class="rcfg-go" onclick="event.stopPropagation();toast('Syncing A &rarr; #11,#12...');markDirty()">Sync &rarr; 2 tiles</button>
+          <div class="rcfg-n">Auto-backup before overwrite. RAM only until you Save.</div>
+        </div>
+      </div>
+    </div>
+    <div class="scr">
+      <div class="scr-hd"><div class="scr-nm">Screen 2: Side LED</div><div class="scr-sz m">960&times;576</div></div>
+      <div class="scr-stats m"><span>12 tiles</span><span>Bri <span class="v am">80%</span></span><span>Cal <span class="v tl">ON</span></span></div>
+      <div class="ports-row"><span class="ports-lbl m" onclick="event.stopPropagation();tglPL('pl2')">Ports &#x25be;</span><div class="pd ok" onclick="event.stopPropagation();drillPort('VX4S P3',12,4,3,[])">3</div><div class="pd mt">4</div></div>
+      <div class="pl" id="pl2">
+        <div class="pl-i" onclick="event.stopPropagation();drillPort('VX4S P3',12,4,3,[])"><div class="pl-n" style="background:var(--tlb);border:2px solid var(--tl);color:var(--tl)">3</div><div class="pl-info"><div class="pl-l1">12 tiles &middot; 192&times;192</div><div class="pl-l2 m">MRV300 v3.8.1</div></div><span class="pl-st pl-ok m">OK</span><span style="color:var(--t3)">&rsaquo;</span></div>
+        <div class="pl-i"><div class="pl-n" style="background:rgba(128,128,128,.1);border:2px solid var(--b1);color:var(--t3)">4</div><div class="pl-info"><div class="pl-l1" style="color:var(--t3)">Empty</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pc-bar" onclick="tglPC(this)">
+  <div class="pc-summary">
+    <div class="pc-chev">&#x25b8;</div><div class="pc-s-dot"></div>
+    <div class="pc-s-info">
+      <div class="pc-s-l1">MCTRL660 <span class="badge m" style="font-size:9px;padding:1px 4px;background:var(--s1);color:var(--t3);border:1px solid var(--b1)">NET 192.168.1.50</span></div>
+      <div class="pc-s-l2 m">1 screen &middot; 12 tiles &middot; <span class="sig">DVI 720p60 &#x25cf;</span></div>
+    </div>
+  </div>
+  <div class="pc-detail" onclick="event.stopPropagation()">
+    <div class="inp" onclick="toast('Input picker')"><span class="inp-l">Input</span><span class="inp-v">DVI &middot; 1280&times;720@60</span><span class="inp-sig m">&#x25cf; signal</span><span style="color:var(--t3)">&#x25be;</span></div>
+    <div class="scr">
+      <div class="scr-hd"><div class="scr-nm">Screen 1: Lobby</div><div class="scr-sz m">960&times;576</div></div>
+      <div class="scr-stats m"><span>12 tiles</span><span>Bri <span class="v am">80%</span></span></div>
+      <div class="ports-row"><span class="ports-lbl m">Ports</span><div class="pd ok" onclick="event.stopPropagation();drillPort('MC660 P1',12,4,3,[])">1</div><div class="pd mt">2</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="slbl">All screens &mdash; select for actions</div>
+<div class="scr-sel">
+  <div class="scr-b on" onclick="tglS(this)"><div class="scr-b-nm">Scr 1: Main</div><div class="scr-b-d m">48t &middot; VX4S</div></div>
+  <div class="scr-b on" onclick="tglS(this)"><div class="scr-b-nm">Scr 2: Side</div><div class="scr-b-d m">12t &middot; VX4S</div></div>
+  <div class="scr-b on" onclick="tglS(this)"><div class="scr-b-nm">Scr 1: Lobby</div><div class="scr-b-d m">12t &middot; MC660</div></div>
+</div>
+<div class="scr-all" onclick="tglAS()">All screens (<span id="sCt">3</span>/3)</div>
+
+<div class="slbl">Quick actions <span style="color:var(--am)" id="qaT">&rarr; all 3 screens</span></div>
+<div class="qa qa3">
+  <div class="qb on" onclick="qaM(this,'Normal')"><div class="qb-l">Normal</div><div class="qb-s m">DISPLAY</div></div>
+  <div class="qb" onclick="qaM(this,'Blackout')"><div class="qb-l">Blackout</div><div class="qb-s m">DISPLAY</div></div>
+  <div class="qb" onclick="qaM(this,'Freeze')"><div class="qb-l">Freeze</div><div class="qb-s m">DISPLAY</div></div>
+</div>
+<div class="qa qa4">
+  <div class="qb" id="mapBtn" onclick="tglMap()"><div class="qb-l">Port map</div><div class="qb-s m" id="mapSt">OFF</div></div>
+  <div class="qb on" onclick="qaTgl(this)"><div class="qb-l">Cal</div><div class="qb-s m">ON</div></div>
+  <div class="qb" onclick="toast('Test pattern picker')"><div class="qb-l">Test pat</div><div class="qb-s m">LAST: RED</div></div>
+  <div class="qb" onclick="toast('Presets')"><div class="qb-l">Presets</div><div class="qb-s m">P1</div></div>
+</div>
+<div class="sr" style="margin-top:4px"><span class="sr-l">Brightness</span><input type="range" min="0" max="100" value="100" oninput="this.nextElementSibling.textContent=this.value+'%';markDirty()"><span class="sr-v m">100%</span></div>
+<div class="sr"><span class="sr-l">Gamma</span><input type="range" min="10" max="30" value="26" oninput="this.nextElementSibling.textContent=(this.value/10).toFixed(1);markDirty()"><span class="sr-v m">2.6</span></div>
+</div>
+
+<div class="pg" id="pg-port">
+  <div class="nav-back" onclick="backOv()">&lsaquo; Overview</div>
+  <div style="font-size:16px;font-weight:600;margin-bottom:2px" id="pT"></div>
+  <div class="m" style="font-size:12px;color:var(--t2);margin-bottom:8px" id="pS"></div>
+  <div class="sel-bar">
+    <div class="sel-b" onclick="pSel('first')">First</div><div class="sel-b" onclick="pSel('last')">Last</div>
+    <div class="sel-b" onclick="pSel('all')">All</div><div class="sel-b" onclick="pSel('clear')">Clear</div>
+  </div>
+  <div class="m" style="font-size:11px;color:var(--t3);text-align:center;margin-bottom:4px" id="pCt">0 selected</div>
+  <div class="tgrid" id="pG" style="grid-template-columns:repeat(6,1fr);margin-bottom:8px"></div>
+  <div style="display:flex;gap:4px;margin-bottom:8px">
+    <div class="sel-b pri" onclick="toast('Test pattern on selected')">Test pattern</div>
+    <div class="sel-b" id="mapBtnGrid" onclick="tglMap()">Port map: OFF</div>
+  </div>
+</div>
+
+<div class="pg" id="pg-save">
+  <div style="font-size:16px;font-weight:600;margin-bottom:4px">Save to hardware</div>
+  <div style="font-size:13px;color:var(--t2);margin-bottom:12px">Review pending changes. Writes to non-volatile flash.</div>
+  <div class="sv-sec">
+    <div class="sv-hd"><span style="flex:1">VX4S (USB)</span><span class="sv-badge sv-mod m">3 CHANGES</span></div>
+    <div class="sv-item"><div class="sv-chk on" onclick="this.classList.toggle('on')"></div><div class="sv-info"><div class="sv-l1">Screen 1: brightness + gamma</div><div class="sv-l2 m">100%&rarr;85%, 2.6&rarr;2.4</div></div></div>
+    <div class="sv-item"><div class="sv-chk on" onclick="this.classList.toggle('on')"></div><div class="sv-info"><div class="sv-l1">RCFG sync P2 #11,#12</div><div class="sv-l2 m">Config A &rarr; 2 tiles</div></div><span class="sv-badge sv-mod m">PENDING</span></div>
+    <div class="sv-item"><div class="sv-chk on" onclick="this.classList.toggle('on')"></div><div class="sv-info"><div class="sv-l1">Screen 2</div><div class="sv-l2 m">No changes</div></div><span class="sv-badge sv-ok m">CLEAN</span></div>
+  </div>
+  <div class="sv-sec">
+    <div class="sv-hd"><span style="flex:1">MCTRL660 (192.168.1.50)</span><span class="sv-badge sv-ok m">NO CHANGES</span></div>
+  </div>
+  <button class="sv-big" onclick="showC()">SAVE TO HARDWARE</button>
+  <div class="sv-warn">Persists to flash. Survives power cycles.</div>
+  <div style="margin-top:12px"><div class="sel-b" style="width:100%;padding:12px;font-size:13px" onclick="toast('Reverting all...')">&#x27f2; Revert session &mdash; discard unsaved</div></div>
+</div>
+
+<div class="pg" id="pg-cfg">
+  <div class="slbl">RCFG cache</div>
+  <div class="cache-card">
+    <div class="cache-hd"><div class="cache-dot"></div> RCFG in cache &mdash; ready to write</div>
+    <div class="cache-info m">Source: VX4S P1 #3 &middot; MRV300<br>Hash: a7f3...e2c1 &middot; 4128 bytes<br>Read: 2 min ago</div>
+    <div class="cache-btns">
+      <div class="cache-btn" style="background:var(--s2);border:1px solid var(--b1);color:var(--t1)" onclick="toast('Select target tiles or port...')">Write to...</div>
+      <div class="cache-btn" style="background:var(--s2);border:1px solid var(--b1);color:var(--t1)" onclick="toast('Saved to /data/rcfg/')">Save to file</div>
+      <div class="cache-btn" style="background:var(--s2);border:1px solid var(--b1);color:var(--t3)" onclick="toast('Cache cleared')">Clear</div>
+    </div>
+  </div>
+  <div class="slbl">RCFG audit</div>
+  <div style="display:flex;gap:4px;margin-bottom:8px">
+    <div class="sel-b" onclick="toast('Auditing 60 tiles...')">Audit all</div>
+    <div class="sel-b" onclick="toast('Flashing mismatches')">Show mismatch</div>
+    <div class="sel-b pri" onclick="toast('Push majority &rarr; mismatched')">Fix all</div>
+  </div>
+  <div class="slbl">Saved configs</div>
+  <div class="home-card">
+    <div class="home-item" onclick="toast('14 saved configs')"><div class="hi-l">Config library</div><div class="hi-v m">14 files</div></div>
+    <div class="home-item" onclick="toast('USB import')"><div class="hi-l">Import from USB</div><div class="hi-v am">&rarr;</div></div>
+    <div class="home-item" onclick="toast('USB export')"><div class="hi-l">Export to USB</div><div class="hi-v am">&rarr;</div></div>
+  </div>
+  <div class="slbl">Presets / EDID / Advanced</div>
+  <div class="home-card">
+    <div class="home-item" onclick="toast('Preset manager')"><div class="hi-l">Presets</div><div class="hi-v m">P1 active</div></div>
+    <div class="home-item" onclick="toast('EDID manager')"><div class="hi-l">EDID config</div><div class="hi-v am">&rarr;</div></div>
+    <div class="home-item" onclick="toast('All 53 commands')"><div class="hi-l">All commands</div><div class="hi-v am">&rarr;</div></div>
+    <div class="home-item" onclick="toast('Monitoring dashboard')"><div class="hi-l">Monitoring</div><div class="hi-v am">&rarr;</div></div>
+    <div class="home-item" onclick="toast('Log viewer')"><div class="hi-l">Logs</div><div class="hi-v am">&rarr;</div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="cov" id="cDlg">
+  <div class="cbox">
+    <div class="cbox-t">Are you sure?</div>
+    <div class="cbox-b">Saving to hardware on:<br><br><b>VX4S</b> &mdash; Brightness, Gamma, RCFG sync (2 tiles)<br><br>This writes to <b>non-volatile flash</b>. Changes persist across power cycles. RCFG on #11 and #12 will be permanently overwritten.</div>
+    <div class="cbox-btns"><div class="cb cb-c" onclick="hideC()">Cancel</div><div class="cb cb-go" onclick="hideC();toast('Saved to hardware')">Yes, save</div></div>
+  </div>
+</div>
+
+<div class="tb">
+  <div class="tt" onclick="nav('home',this)"><span class="tt-i">&#x2302;</span>Home</div>
+  <div class="tt on" onclick="nav('ov',this)"><span class="tt-i">&#x25e7;</span>Overview</div>
+  <div class="tt" onclick="nav('ov',this);toast('Control tab')"><span class="tt-i">&#x25ce;</span>Control</div>
+  <div class="tt" onclick="nav('save',this)"><span class="tt-i">&#x2b07;</span>Save<div class="tt-dot show" id="svDot"></div></div>
+  <div class="tt" onclick="nav('cfg',this)"><span class="tt-i">&#x2699;</span>Config<div class="tt-dot show" id="cfgDot"></div></div>
+</div>
+
+<div class="toast" id="tst"></div>
+
+<script>
+function nav(pg,el){document.querySelectorAll('.tt').forEach(function(t){t.classList.remove('on')});document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on')});el.classList.add('on');document.getElementById('pg-'+pg).classList.add('on')}
+function tglPC(el){el.classList.toggle('expanded')}
+function tglPL(id){event.stopPropagation();document.getElementById(id).classList.toggle('show')}
+function tglExp(id){document.getElementById(id).classList.toggle('show')}
+function sR(el){el.parentElement.querySelectorAll('.rcfg-opt').forEach(function(o){o.classList.remove('sel')});el.classList.add('sel')}
+function tglS(el){el.classList.toggle('on');updSC()}
+function tglAS(){var b=document.querySelectorAll('.scr-b');var a=Array.from(b).every(function(x){return x.classList.contains('on')});b.forEach(function(x){x.classList.toggle('on',!a)});updSC()}
+function updSC(){var c=document.querySelectorAll('.scr-b.on').length;document.getElementById('sCt').textContent=c;document.getElementById('qaT').innerHTML=c===0?'&rarr; none':'&rarr; '+c+'/3 screens'}
+function qaM(el,m){el.parentElement.querySelectorAll('.qb').forEach(function(b){b.classList.remove('on','dn')});el.classList.add('on');if(m==='Blackout')el.classList.add('dn');toast(m)}
+function qaTgl(el){el.classList.toggle('on');el.querySelector('.qb-s').textContent=el.classList.contains('on')?'ON':'OFF'}
+function tglMap(){var b=document.getElementById('mapBtn');var g=document.getElementById('mapBtnGrid');b.classList.toggle('on');var on=b.classList.contains('on');document.getElementById('mapSt').textContent=on?'ON':'OFF';g.textContent='Port map: '+(on?'ON':'OFF');if(on){g.style.background='var(--am)';g.style.color='var(--bg)';g.style.borderColor='var(--am)'}else{g.style.background='';g.style.color='';g.style.borderColor=''}toast('Port mapping '+(on?'ON':'OFF'))}
+function markDirty(){document.getElementById('svDot').classList.add('show')}
+function showC(){document.getElementById('cDlg').classList.add('show')}
+function hideC(){document.getElementById('cDlg').classList.remove('show')}
+function drillPort(name,count,cols,rows,mis){document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on')});document.getElementById('pg-port').classList.add('on');document.getElementById('pT').textContent=name;document.getElementById('pS').textContent=count+' tiles';document.getElementById('pG').style.gridTemplateColumns='repeat('+cols+',1fr)';var g=document.getElementById('pG');g.innerHTML='';for(var i=0;i<count;i++){var t=document.createElement('div');t.className='tl m '+(mis.indexOf(i)!==-1?'warn':'ok');t.textContent=i+1;t.onclick=function(){this.classList.toggle('sel');updPC()};g.appendChild(t)}}
+function backOv(){document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on')});document.getElementById('pg-ov').classList.add('on');document.querySelectorAll('.tt').forEach(function(t){t.classList.remove('on')});document.querySelectorAll('.tt')[1].classList.add('on')}
+function updPC(){document.getElementById('pCt').textContent=document.querySelectorAll('#pG .tl.sel').length+' selected'}
+function pSel(m){var t=Array.from(document.querySelectorAll('#pG .tl'));if(m==='all')t.forEach(function(x){x.classList.add('sel')});else if(m==='clear')t.forEach(function(x){x.classList.remove('sel')});else if(m==='first'){t.forEach(function(x){x.classList.remove('sel')});if(t[0])t[0].classList.add('sel')}else if(m==='last'){t.forEach(function(x){x.classList.remove('sel')});if(t.length)t[t.length-1].classList.add('sel')}updPC()}
+var tT;function toast(msg){var t=document.getElementById('tst');t.innerHTML='<b>'+msg+'</b>';t.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){t.classList.remove('show')},2000)}
+</script>
+</body>
+</html>
