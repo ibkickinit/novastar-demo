@@ -153,11 +153,9 @@ body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-u
 .port-section{padding:10px 12px}
 .port-label{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--color-text-dim);margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:6px}
 .port-label:active{color:var(--color-text-sub)}
-.port-dots-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-/* Two-row layout for processors with >10 ports */
-.port-dots-row.two-row{gap:5px;max-width:100%}
-.port-dot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-data);transition:all .15s;position:relative}
-.port-dot.small{width:28px;height:28px;font-size:10px}
+.port-dots-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+/* All port dots use uniform sizing — max 10 per row at this size */
+.port-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-data);transition:all .15s;position:relative}
 .port-dot.healthy{background:var(--color-teal-bg);color:var(--color-teal);border:2px solid var(--color-teal-border);box-shadow:0 0 8px rgba(45,212,168,.25)}
 .port-dot.mismatch{background:var(--color-amber-bg);color:var(--color-amber);border:2px solid var(--color-amber-border);box-shadow:0 0 8px rgba(255,179,0,.25)}
 .port-dot.empty{background:var(--color-surface-high);color:var(--color-text-dim);border:2px solid var(--color-border)}
@@ -571,30 +569,30 @@ body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-u
       <div class="port-section">
         <div class="port-label" id="vx2000-port-label" onclick="togglePortList('vx2000-port-list','vx2000-port-label',event)">PORTS &#9654; <span style="font-size:10px;opacity:.6">TAP TO EXPAND</span></div>
         <!-- Row 1: ports 1-10 -->
-        <div class="port-dots-row two-row">
-          <div class="port-dot small healthy" onclick="openPortDetail(1)">1</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(2)">2</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(3)">3</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(4)">4</div>
-          <div class="port-dot small healthy redundant" onclick="openPortDetail(5)" title="Redundant (backup) port">5</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(6)">6</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(7)">7</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(8)">8</div>
-          <div class="port-dot small mismatch" onclick="openPortDetail(9)">9</div>
-          <div class="port-dot small mismatch" onclick="openPortDetail(10)">10</div>
+        <div class="port-dots-row">
+          <div class="port-dot healthy" onclick="openPortDetail(1)">1</div>
+          <div class="port-dot healthy" onclick="openPortDetail(2)">2</div>
+          <div class="port-dot healthy" onclick="openPortDetail(3)">3</div>
+          <div class="port-dot healthy" onclick="openPortDetail(4)">4</div>
+          <div class="port-dot healthy redundant" onclick="openPortDetail(5)" title="Redundant (backup) port">5</div>
+          <div class="port-dot healthy" onclick="openPortDetail(6)">6</div>
+          <div class="port-dot healthy" onclick="openPortDetail(7)">7</div>
+          <div class="port-dot healthy" onclick="openPortDetail(8)">8</div>
+          <div class="port-dot mismatch" onclick="openPortDetail(9)">9</div>
+          <div class="port-dot mismatch" onclick="openPortDetail(10)">10</div>
         </div>
         <!-- Row 2: ports 11-20 -->
-        <div class="port-dots-row two-row">
-          <div class="port-dot small healthy" onclick="openPortDetail(11)">11</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(12)">12</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(13)">13</div>
-          <div class="port-dot small mismatch" onclick="openPortDetail(14)">14</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(15)">15</div>
-          <div class="port-dot small healthy" onclick="openPortDetail(16)">16</div>
-          <div class="port-dot small empty">17</div>
-          <div class="port-dot small mismatch" onclick="openPortDetail(18)">18</div>
-          <div class="port-dot small empty">19</div>
-          <div class="port-dot small empty">20</div>
+        <div class="port-dots-row">
+          <div class="port-dot healthy" onclick="openPortDetail(11)">11</div>
+          <div class="port-dot healthy" onclick="openPortDetail(12)">12</div>
+          <div class="port-dot healthy" onclick="openPortDetail(13)">13</div>
+          <div class="port-dot mismatch" onclick="openPortDetail(14)">14</div>
+          <div class="port-dot healthy" onclick="openPortDetail(15)">15</div>
+          <div class="port-dot healthy" onclick="openPortDetail(16)">16</div>
+          <div class="port-dot empty">17</div>
+          <div class="port-dot mismatch" onclick="openPortDetail(18)">18</div>
+          <div class="port-dot empty">19</div>
+          <div class="port-dot empty">20</div>
         </div>
         <div id="vx2000-port-list" style="display:none">
           <div class="port-detail-list">
@@ -748,7 +746,7 @@ body{background:var(--color-bg);color:var(--color-text);font-family:var(--font-u
 <div class="page" id="page-save"><div class="page-content">
   <p style="font-size:13px;color:var(--color-text-sub);margin-bottom:10px">Changes live in RAM. Write to flash to persist across power cycles.</p>
   <div class="save-processor-section">
-    <div class="save-processor-header"><span class="save-processor-name">VX4S</span><span class="save-change-count" id="save-change-count">3 CHANGES</span></div>
+    <div class="save-processor-header"><span class="save-processor-name">VX4S <span class="badge conn-badge-usb" style="font-size:9px;vertical-align:middle">USB</span></span><span class="save-change-count" id="save-change-count">3 CHANGES</span></div>
     <div class="save-change-item"><div class="save-checkbox checked" data-change-index="0" onclick="toggleSaveCheckbox(0)">&#10003;</div><div class="save-change-info"><div class="save-change-name">Brightness &mdash; Screen 1</div><div class="save-change-detail">100% &rarr; 85%</div></div><span class="save-change-status">PENDING</span></div>
     <div class="save-change-item"><div class="save-checkbox checked" data-change-index="1" onclick="toggleSaveCheckbox(1)">&#10003;</div><div class="save-change-info"><div class="save-change-name">Gamma &mdash; Screen 1</div><div class="save-change-detail">2.6 &rarr; 2.4</div></div><span class="save-change-status">PENDING</span></div>
     <div class="save-change-item"><div class="save-checkbox checked" data-change-index="2" onclick="toggleSaveCheckbox(2)">&#10003;</div><div class="save-change-info"><div class="save-change-name">Calibration &mdash; Screen 2</div><div class="save-change-detail">ON &rarr; OFF</div></div><span class="save-change-status">PENDING</span></div>
@@ -1670,6 +1668,44 @@ function toast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(function() { t.classList.remove('visible'); }, 2200);
 }
+
+/* ==============================================================
+   API INTEGRATION
+   Fetches live data from /api/processors when served by the
+   Express server. Falls back gracefully when opened standalone
+   (file:// or static server without API).
+   ============================================================== */
+
+function fetchProcessors() {
+  fetch('/api/processors')
+    .then(function(res) { return res.json(); })
+    .then(function(processors) {
+      console.log('[API] Loaded ' + processors.length + ' processors from server');
+      // Update status bar with live counts
+      var totalTiles = 0;
+      for (var i = 0; i < processors.length; i++) totalTiles += processors[i].tileCount;
+      el('status-text').textContent = processors.length + ' processors \u00b7 ' + totalTiles + ' tiles';
+    })
+    .catch(function() {
+      // No API available — running standalone with demo data. That's fine.
+      console.log('[API] No server detected, using demo data');
+    });
+}
+
+function fetchSiteConfig() {
+  fetch('/api/site-config')
+    .then(function(res) { return res.json(); })
+    .then(function(config) {
+      console.log('[API] Loaded site config:', config.device && config.device.name);
+    })
+    .catch(function() {
+      // No config endpoint — standalone mode
+    });
+}
+
+// Bootstrap: try to load live data on startup
+fetchProcessors();
+fetchSiteConfig();
 </script>
 </body>
 </html>
